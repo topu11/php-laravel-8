@@ -8,6 +8,7 @@ use App\Http\Controllers\TestController;
 use \App\Http\Controllers\PostController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\FluentController;
+use App\Http\Controllers\UploadController;
 use App\Http\Controllers\StudentController;
 
 /*
@@ -76,7 +77,6 @@ Route::get('/form-view', [FormController::class, 'index'])->name('form.view');
 
 Route::post('/form-post', [FormController::class, 'formpost'])->name('form.post');
 
-
 Route::controller(PostController::class)->group(function () {
 
     Route::name('post.')->group(function () {
@@ -97,15 +97,36 @@ Route::controller(PostController::class)->group(function () {
 
 });
 
-Route::get('/student-post-mapping',[StudentController::class,'index']);
+Route::get('/student-post-mapping', [StudentController::class, 'index']);
 
-Route::get('/table-structure', function(){
+Route::get('/table-structure', function () {
     //DB::table('posts');
-    $studenttabledescription=DB::select('DESCRIBE posts');
+    $studenttabledescription = DB::select('DESCRIBE posts');
 
     var_dump($studenttabledescription);
     // return response()->json([
     //   'status'=>'success',
     //   'studenttabledescription'=>$studenttabledescription
     // ],200);
+});
+
+Route::get('blade-test', function () {
+    return view('index');
+});
+
+Route::get('about-us', function () {
+    return view('about');
+});
+
+Route::get('contact-us', function () {
+    return view('contact');
+});
+
+Route::controller(UploadController::class)->group(function () {
+
+    Route::group(['prefix'=>'fileupload','as'=>'fileupload.'], function(){
+        Route::get('/index', 'index')->name('index');
+        Route::post('/store', 'store')->name('store');
+    });
+
 });
